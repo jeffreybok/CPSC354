@@ -1,0 +1,192 @@
+\documentclass{article}
+
+\usepackage{tikz} 
+\usetikzlibrary{automata, positioning, arrows} 
+
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,
+    linkcolor= blue,
+    citecolor= blue,
+    filecolor= blue,
+    }
+    
+\usepackage{listings}
+\usepackage[utf8]{inputenc}                                                    
+\usepackage[T1]{fontenc}      
+\usepackage{enumitem}                                                 
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newtheoremstyle{theorem}
+  {\topsep} {\topsep} {\itshape\/} {0pt} {\bfseries} {.} {5pt plus 1pt minus 1pt} {}
+\theoremstyle{theorem} 
+   \newtheorem{theorem}{Theorem}[section]
+   \newtheorem{corollary}[theorem]{Corollary}
+   \newtheorem{lemma}[theorem]{Lemma}
+   \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+   \newtheorem{definition}[theorem]{Definition}
+   \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}    
+  \newtheorem{remark}[theorem]{Remark}
+
+\lstdefinelanguage{PythonDFARun}{
+    keywords={def, for, in, if, return},
+    keywordstyle=\color{blue}\bfseries,
+    morekeywords={self},
+    keywordstyle=[2]\color{purple},
+    morekeywords=[2]{self},
+    stringstyle=\color{red},
+    commentstyle=\color{gray},
+    identifierstyle=\color{black},
+    sensitive=true
+}
+
+\lstset{
+    language=PythonDFARun,
+    basicstyle=\ttfamily\footnotesize,
+    frame=single,
+    showstringspaces=false,
+    tabsize=4
+}
+
+\title{CPSC-354 Report}
+\author{Jeffrey Bok  \\ Chapman University}
+\date{\today} 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\section{Introduction}\label{intro}
+
+\section{Week by Week}\label{homework}
+
+\subsection{Week 1}
+\subsubsection{Homework}
+
+What is the MU Puzzle and how do you "solve" it?:
+
+The MU puzzle is a logic puzzle created by Douglas Hofstadter in his 1979 book "Gödel, Escher, Bach: An Eternal Golden Braid." It's designed to illustrate concepts about formal systems, computability, and the limits of rule-based reasoning. The rules are below:
+
+Rule I: If a string ends in I, you can add U to the end (xI → xIU)\newline
+Rule II: If you have Mx, you can make Mxx (double everything after M)\newline
+Rule III: If you find III anywhere in your string, you can replace it with U (xIIIy → xUy)\newline
+Rule IV: If you find UU anywhere in your string, you can remove it (xUUy → xy)
+
+To "solve" the puzzle, you try to apply a combination of rules step by step, creating new strings. 
+Eventually, you'll find that MU can never be reached because the rules never allow you to remove the odd number of \texttt{I}'s needed to get zero. 
+
+\subsubsection{Exploration}
+Hofstadter used this puzzle to demonstrate how formal systems can have inherent limitations - some statements that seem like they should be provable within a system are actually unprovable. This connects to Gödel's incompleteness theorems and fundamental questions about the nature of mathematical truth and computation.
+
+Programming languages are formal systems, just like the MU puzzle. They have:
+
+\begin{itemize}
+\item Syntax rules (what constitutes valid code)
+\item Transformation rules (how expressions evaluate)  
+\item Semantic constraints (what programs can actually compute)
+\end{itemize}
+
+The MU puzzle demonstrates that even simple rule sets can have hidden limitations - similarly, programming languages have inherent computational boundaries.
+
+\subsubsection{Questions}
+1. TEST QUESTIONS
+
+\subsection{Week 2}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 3}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 4}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 5}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 6}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 7}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 8}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 9}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 10}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 11}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\section{Synthesis}
+
+\section{Evidence of Participation}
+
+\section{Conclusion}\label{conclusion}
+
+\begin{thebibliography}{9}
+\end{thebibliography}
+
+\end{document}
