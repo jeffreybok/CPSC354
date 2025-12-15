@@ -1,0 +1,1032 @@
+\documentclass{article}
+
+\usepackage{tikz} 
+\usetikzlibrary{automata, positioning, arrows} 
+
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,
+    linkcolor= blue,
+    citecolor= blue,
+    filecolor= blue,
+    }
+    
+\usepackage{listings}
+\usepackage[utf8]{inputenc}                                                    
+\usepackage[T1]{fontenc}      
+\usepackage{enumitem}                                                 
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newtheoremstyle{theorem}
+  {\topsep} {\topsep} {\itshape\/} {0pt} {\bfseries} {.} {5pt plus 1pt minus 1pt} {}
+\theoremstyle{theorem} 
+   \newtheorem{theorem}{Theorem}[section]
+   \newtheorem{corollary}[theorem]{Corollary}
+   \newtheorem{lemma}[theorem]{Lemma}
+   \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+   \newtheorem{definition}[theorem]{Definition}
+   \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}    
+  \newtheorem{remark}[theorem]{Remark}
+
+\lstdefinelanguage{PythonDFARun}{
+    keywords={def, for, in, if, return},
+    keywordstyle=\color{blue}\bfseries,
+    morekeywords={self},
+    keywordstyle=[2]\color{purple},
+    morekeywords=[2]{self},
+    stringstyle=\color{red},
+    commentstyle=\color{gray},
+    identifierstyle=\color{black},
+    sensitive=true
+}
+
+\lstset{
+    language=PythonDFARun,
+    basicstyle=\ttfamily\footnotesize,
+    frame=single,
+    showstringspaces=false,
+    tabsize=4
+}
+
+\title{CPSC-354 Report}
+\author{Jeffrey Bok  \\ Chapman University}
+\date{\today} 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\section{Introduction}\label{intro}
+
+\section{Week by Week}\label{homework}
+
+\subsection{Week 1}
+\subsubsection{Homework}
+
+What is the MU Puzzle and how do you "solve" it?:
+
+The MU puzzle is a logic puzzle created by Douglas Hofstadter in his 1979 book "Gödel, Escher, Bach: An Eternal Golden Braid." It's designed to illustrate concepts about formal systems, computability, and the limits of rule-based reasoning. The rules are below:
+
+Rule I: If a string ends in I, you can add U to the end (xI → xIU)\newline
+Rule II: If you have Mx, you can make Mxx (double everything after M)\newline
+Rule III: If you find III anywhere in your string, you can replace it with U (xIIIy → xUy)\newline
+Rule IV: If you find UU anywhere in your string, you can remove it (xUUy → xy)
+
+To "solve" the puzzle, you try to apply a combination of rules step by step, creating new strings. 
+Eventually, you'll find that MU can never be reached because the rules never allow you to remove the odd number of \texttt{I}'s needed to get zero. 
+
+\subsubsection{Exploration}
+Hofstadter used this puzzle to demonstrate how formal systems can have inherent limitations - some statements that seem like they should be provable within a system are actually unprovable. This connects to Gödel's incompleteness theorems and fundamental questions about the nature of mathematical truth and computation.
+
+Programming languages are formal systems, just like the MU puzzle. They have:
+
+\begin{itemize}
+\item Syntax rules (what constitutes valid code)
+\item Transformation rules (how expressions evaluate)  
+\item Semantic constraints (what programs can actually compute)
+\end{itemize}
+
+The MU puzzle demonstrates that even simple rule sets can have hidden limitations - similarly, programming languages have inherent computational boundaries.
+
+\subsubsection{Questions}
+1. The impossibility of reaching "MU" from "MI" is provable, yet someone working within the system might not realize this. How does this relate to the halting problem and undecidable questions in programming?
+
+\subsection{Week 2}
+\subsubsection{Homework}
+    Consider the following list of ARSs:\newline
+    \begin{enumerate}
+    \item $A = \{\}$.
+    \item $A = \{a\}$ and $R = \{\}$.
+    \item $A = \{a\}$ and $R = \{(a,a)\}$.
+    \item $A = \{a,b,c\}$ and $R = \{(a,b),(a,c)\}$.
+    \item $A = \{a,b\}$ and $R = \{(a,a),(a,b)\}$.
+    \item $A = \{a,b,c\}$ and $R = \{(a,b),(b,b),(a,c)\}$.
+    \item $A = \{a,b,c\}$ and $R = \{(a,b),(b,b),(a,c),(c,c)\}$.
+    \end{enumerate}
+    
+    Draw a picture for each of the ARSs above. Are the ARSs terminating? Are they confluent? Do they have unique normal forms?
+
+    Try to find an example of an ARS for each of the possible 8 combinations. Draw pictures of these examples.
+
+        
+    \paragraph{ARS 1: $A = \{\}$}
+    \begin{center}
+    \begin{tikzpicture}
+        \node at (0,0) {\textit{Empty graph (no nodes, no edges)}};
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} YES \quad \textbf{Confluent:} YES \quad \textbf{Unique Normal Forms:} YES
+    
+    \paragraph{ARS 2: $A = \{a\}$, $R = \{\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=2cm, auto, thick]
+        \node[circle, draw] (a) {$a$};
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} YES \quad \textbf{Confluent:} YES \quad \textbf{Unique Normal Forms:} YES
+    
+    \paragraph{ARS 3: $A = \{a\}$, $R = \{(a,a)\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=2cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \path (a) edge[loop above] (a);
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} NO \quad \textbf{Confluent:} YES \quad \textbf{Unique Normal Forms:} NO
+    
+    \paragraph{ARS 4: $A = \{a,b,c\}$, $R = \{(a,b),(a,c)\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below left=of a] {$b$};
+        \node[circle, draw] (c) [below right=of a] {$c$};
+        
+        \path (a) edge (b);
+        \path (a) edge (c);
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} YES \quad \textbf{Confluent:} NO \quad \textbf{Unique Normal Forms:} NO
+    
+    \paragraph{ARS 5: $A = \{a,b\}$, $R = \{(a,a),(a,b)\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=3cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below=of a] {$b$};
+        
+        \path (a) edge[loop left] (a);
+        \path (a) edge (b);
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} NO \quad \textbf{Confluent:} NO \quad \textbf{Unique Normal Forms:} NO
+    
+    \paragraph{ARS 6: $A = \{a,b,c\}$, $R = \{(a,b),(b,b),(a,c)\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below left=of a] {$b$};
+        \node[circle, draw] (c) [below right=of a] {$c$};
+        
+        \path (a) edge (b);
+        \path (a) edge (c);
+        \path (b) edge[loop left] (b);
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} NO \quad \textbf{Confluent:} NO \quad \textbf{Unique Normal Forms:} NO
+    
+    \paragraph{ARS 7: $A = \{a,b,c\}$, $R = \{(a,b),(b,b),(a,c),(c,c)\}$}
+    \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below left=of a] {$b$};
+        \node[circle, draw] (c) [below right=of a] {$c$};
+        
+        \path (a) edge (b);
+        \path (a) edge (c);
+        \path (b) edge[loop left] (b);
+        \path (c) edge[loop right] (c);
+    \end{tikzpicture}
+    \end{center}
+    \textbf{Terminating:} NO \quad \textbf{Confluent:} NO \quad \textbf{Unique Normal Forms:} NO
+
+    \paragraph{8 Combinations Table}
+    \begin{center}
+        \begin{tabular}{|c|c|c|l|}
+        \hline
+        \textbf{Confluent} & \textbf{Terminating} & \textbf{Unique NF} & \textbf{Example} \\
+        \hline
+        True & True & True & $A = \{a\}$, $R = \{\}$ \\
+        True & True & False & $A = \{\}$, $R = \{\}$ \\
+        True & False & True & $A = \{a,b\}$, $R = \{(a,b),(b,b)\}$ \\
+        True & False & False & $A = \{a\}$, $R = \{(a,a)\}$ \\
+        False & True & True & $A = \{a,b,c,d\}$, $R = \{(a,b),(a,c),(c,d)\}$ \\
+        False & True & False & $A = \{a,b,c\}$, $R = \{(a,b),(a,c)\}$ \\
+        False & False & True & $A = \{a,b,c\}$, $R = \{(a,b),(b,a),(a,c),(c,a)\}$ \\
+        False & False & False & $A = \{a,b,c\}$, $R = \{(a,b),(b,b),(a,c)\}$ \\
+        \hline
+        \end{tabular}
+    \end{center}
+
+    \paragraph{Examples for 8 Combinations}
+
+    \subparagraph{Example 1: Confluent=T, Terminating=T, Unique Normal Forms=T}
+    $A = \{a\}$, $R = \{\}$
+    \begin{center}
+    \begin{tikzpicture}[node distance=2cm, auto, thick]
+        \node[circle, draw] (a) {$a$};
+    \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 2: Confluent=T, Terminating=T, Unique Normal Forms=F}
+    $A = \{\}$, $R = \{\}$
+    \begin{center}
+    \begin{tikzpicture}
+        \node at (0,0) {\textit{Empty graph}};
+    \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 3: Confluent=T, Terminating=F, Unique Normal Forms=T}
+    $A = \{a,b\}$, $R = \{(a,b),(b,b)\}$
+    \begin{center}
+    \begin{tikzpicture}[node distance=3cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [right=of a] {$b$};
+        
+        \path (a) edge (b);
+        \path (b) edge[loop right] (b);
+    \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 4: Confluent=T, Terminating=F, Unique Normal Forms=F}
+    $A = \{a\}$, $R = \{(a,a)\}$
+    \begin{center}
+    \begin{tikzpicture}[node distance=2cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \path (a) edge[loop above] (a);
+    \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 5: Confluent=F, Terminating=T, Unique Normal Forms=T}
+    $A = \{a,b,c,d\}$, $R = \{(a,b),(a,c),(c,d)\}$
+    \begin{center}
+        \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+            \node[circle, draw] (a) {$a$};
+            \node[circle, draw] (b) [below left=of a] {$b$};
+            \node[circle, draw] (c) [below right=of a] {$c$};
+            \node[circle, draw] (d) [below=of c] {$d$};
+            
+            \path (a) edge (b);
+            \path (a) edge (c);
+            \path (c) edge (d);
+        \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 6: Confluent=F, Terminating=T, Unique Normal Forms=F}
+    $A = \{a,b,c\}$, $R = \{(a,b),(a,c)\}$
+    \begin{center}
+        \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+            \node[circle, draw] (a) {$a$};
+            \node[circle, draw] (b) [below left=of a] {$b$};
+            \node[circle, draw] (c) [below right=of a] {$c$};
+            
+            \path (a) edge (b);
+            \path (a) edge (c);
+        \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 7: Confluent=F, Terminating=F, Unique Normal Forms=T}
+    $A = \{a,b,c\}$, $R = \{(a,b),(b,a),(a,c),(c,a)\}$
+    \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below left=of a] {$b$};
+        \node[circle, draw] (c) [below right=of a] {$c$};
+        
+        \path (a) edge[bend left=15] (b);
+        \path (b) edge[bend left=15] (a);
+        \path (a) edge[bend right=15] (c);
+        \path (c) edge[bend right=15] (a);
+    \end{tikzpicture}
+    \end{center}
+
+    \subparagraph{Example 8: Confluent=F, Terminating=F, Unique Normal Forms=F}
+    $A = \{a,b,c\}$, $R = \{(a,b),(b,b),(a,c)\}$
+    \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm, auto, thick, -latex]
+        \node[circle, draw] (a) {$a$};
+        \node[circle, draw] (b) [below left=of a] {$b$};
+        \node[circle, draw] (c) [below right=of a] {$c$};
+        
+        \path (a) edge (b);
+        \path (a) edge (c);
+        \path (b) edge[loop left] (b);
+    \end{tikzpicture}
+    \end{center}
+
+    \subsubsection{Exploration}
+    Abstract Reduction Systems provide a mathematical foundation for understanding computation and rewriting. The properties of termination, confluence, and unique normal forms are fundamental to understanding how programming languages behave:
+    
+    \begin{itemize}
+    \item \textbf{Termination} ensures that computations eventually halt
+    \item \textbf{Confluence} guarantees that the order of operations doesn't affect the final result
+    \item \textbf{Unique Normal Forms} means every expression has a single, well-defined simplified form
+    \end{itemize}
+    
+    These concepts directly apply to programming language design, where we want predictable evaluation strategies and guaranteed termination for certain classes of programs.
+    
+    \subsubsection{Questions}
+    1. How do the termination properties of ARSs relate to the halting problem in computation?\newline
+    2. Why might a programming language designer prefer confluent systems over non-confluent ones?\newline
+
+\subsection{Week 3}
+\subsubsection{Homework}
+Consider the rewrite rules:
+\begin{itemize}
+\item ab $\to$ ba
+\item ba $\to$ ab  
+\item aa $\to$ (empty string)
+\item b $\to$ (empty string)
+\end{itemize}
+
+\subsubsection{Sample Reductions}
+\textbf{Reducing abba:}
+
+abba $\to$ baba (using ab $\to$ ba)
+
+baba $\to$ bbaa (using ab $\to$ ba)
+
+bbaa $\to$ baa (using b $\to$ empty)
+
+baa $\to$ aa (using b $\to$ empty)
+
+aa $\to$ empty (using aa $\to$ empty)
+
+\textbf{Reducing bababa:}
+
+bababa $\to$ bbaaaba (using ab $\to$ ba twice)
+
+bbaaaba $\to$ baaaba (using b $\to$ empty)
+
+baaaba $\to$ aaaba (using b $\to$ empty)
+
+aaaba $\to$ aba (using aa $\to$ empty)
+
+aba $\to$ baa (using ab $\to$ ba)
+
+baa $\to$ aa (using b $\to$ empty)
+
+aa $\to$ empty (using aa $\to$ empty)
+
+\subsubsection{Analysis}
+\textbf{Why is the ARS not terminating?}
+
+The first two rules ab $\to$ ba and ba $\to$ ab create cycles. You can apply these rules forever, going back and forth between ab and ba.
+
+\textbf{Find two strings that are not equivalent. How many non-equivalent strings can you find?}
+
+Two strings that are not equivalent: "a" and "empty string". The string "a" cannot be reduced further, while other strings can reduce to empty.
+
+\textbf{Equivalence classes and normal forms:}
+There are exactly 2 equivalence classes:
+\begin{enumerate}
+\item Strings that reduce to empty string
+\item Strings that reduce to "a"
+\end{enumerate}
+
+The normal forms are: empty string and "a"
+
+\textbf{Modified terminating ARS:}
+To make it terminating, always eliminate b's first, then eliminate aa's, then do swapping only if needed.
+
+\textbf{Questions about strings that can be answered using the ARS:}
+\begin{enumerate}
+\item "Given a string, does it contain an even number of a's?"
+\item "Given a string, does it contain an odd number of a's?"
+\item "Are two strings equivalent under this rewrite system?"
+\end{enumerate}
+
+\subsection{Exercise 5b}
+\subsubsection{Modified Rewrite Rules}
+Same as Exercise 5, but change aa $\to$ empty to aa $\to$ a:
+\begin{itemize}
+\item ab $\to$ ba
+\item ba $\to$ ab  
+\item aa $\to$ a (pairs of a become single a)
+\item b $\to$ (empty string)
+\end{itemize}
+
+\subsubsection{Sample Reductions}
+\textbf{Reducing abba:}
+
+abba $\to$ baba (using ab $\to$ ba)
+
+baba $\to$ bbaa (using ab $\to$ ba)
+
+bbaa $\to$ baa (using b $\to$ empty)
+
+baa $\to$ aa (using b $\to$ empty)
+
+aa $\to$ a (using aa $\to$ a)
+
+\textbf{Reducing bababa:}
+
+bababa $\to$ bbaaaba (using ab $\to$ ba twice)
+
+bbaaaba $\to$ baaaba (using b $\to$ empty)
+
+baaaba $\to$ aaaba (using b $\to$ empty)
+
+aaaba $\to$ aaba (using aa $\to$ a)
+
+aaba $\to$ abaa (using ab $\to$ ba)
+
+abaa $\to$ baaa (using ab $\to$ ba)
+
+baaa $\to$ aaa (using b $\to$ empty)
+
+aaa $\to$ aa (using aa $\to$ a)
+
+aa $\to$ a (using aa $\to$ a)
+
+\subsubsection{Analysis}
+\textbf{Why the ARS is not terminating:}
+Same as Exercise 5 - the rules ab $\to$ ba and ba $\to$ ab create infinite cycles.
+
+\textbf{Non-equivalent strings:}
+Two strings that are not equivalent: "a" and "empty string". We can find exactly 2 non-equivalent strings.
+
+\textbf{Equivalence classes and normal forms:}
+There are exactly 2 equivalence classes:
+\begin{enumerate}
+\item Strings with even number of a's $\to$ reduce to empty
+\item Strings with odd number of a's $\to$ reduce to "a"
+\end{enumerate}
+
+The normal forms are: empty string and "a"
+
+\textbf{Modified terminating ARS:}
+To make it terminating, use the same priority as Exercise 5:
+\begin{enumerate}
+\item b $\to$ empty (eliminate all b's first)
+\item aa $\to$ a (reduce pairs of a's)
+\item ab $\to$ ba (only if needed)
+\end{enumerate}
+
+\textbf{Questions about strings that can be answered using the ARS:}
+\begin{enumerate}
+\item "Given a string, does it contain an even number of a's?"
+\item "Given a string, does it contain an odd number of a's?"
+\item "Are two strings equivalent under this rewrite system?"
+\end{enumerate}
+
+\subsubsection{Exploration}
+\subsubsection{Questions}
+\begin{enumerate}
+\item If two completely different sets of rewrite rules (Exercise 5 vs 5b) produce the same equivalence classes, what does this tell us about the relationship between implementation and specification in computer science?
+
+\item If "abab" and "bbaa" are equivalent under this system, but clearly different as strings, what does "equivalence" really mean? Is mathematical equivalence different from everyday sameness?
+
+\end{enumerate}
+
+\subsection{Week 4}
+\subsubsection{Homework}
+
+\textbf{HW 4.1: Euclidean Algorithm Termination}
+
+Consider the Euclidean algorithm for computing GCD:
+\begin{lstlisting}[language=Python]
+while b != 0:
+    temp = b
+    b = a mod b
+    a = temp
+return a
+\end{lstlisting}
+
+\paragraph{Conditions for Termination}
+The algorithm terminates when $a, b \in \mathbb{N}$ (non-negative integers).
+
+\paragraph{Measure Function and Proof}
+We define $\phi(a, b) = b$.
+
+\begin{proof}
+The measure function proves termination:
+
+1. $\phi(a, b) = b \in \mathbb{N}$ (maps to natural numbers)
+
+2. In each iteration: $b' = a \bmod b < b$, so $\phi(a', b') < \phi(a, b)$ (strictly decreases)
+
+3. By well-ordering, we must reach $b = 0$ in finite steps (termination)
+
+Example trace with $a = 48, b = 18$: The measure decreases $18 \to 12 \to 6 \to 0$.
+\end{proof}
+
+\vspace{1em}
+
+\textbf{HW 4.2: Merge Sort Termination}
+
+Consider merge sort:
+\begin{lstlisting}[language=Python]
+function merge_sort(arr, left, right):
+    if left >= right:
+        return
+    mid = (left + right) / 2
+    merge_sort(arr, left, mid)
+    merge_sort(arr, mid+1, right)
+    merge(arr, left, mid, right)
+\end{lstlisting}
+
+\paragraph{Measure Function and Proof}
+We define $\phi(\texttt{left}, \texttt{right}) = \texttt{right} - \texttt{left} + 1$ (subarray size).
+
+\begin{proof}
+The measure function proves termination:
+
+1. $\phi(\texttt{left}, \texttt{right}) = \texttt{right} - \texttt{left} + 1 \geq 1$ when $\texttt{left} \leq \texttt{right}$ (natural number)
+
+2. Both recursive calls have smaller measures:
+   - $\phi(\texttt{left}, \texttt{mid}) < \phi(\texttt{left}, \texttt{right})$ since $\texttt{mid} < \texttt{right}$
+   - $\phi(\texttt{mid}+1, \texttt{right}) < \phi(\texttt{left}, \texttt{right})$ since $\texttt{mid}+1 > \texttt{left}$
+
+3. Base case when $\phi \leq 1$ (no more recursive calls)
+
+Example: For size 8, measure decreases $8 \to 4 \to 2 \to 1$.
+\end{proof}
+
+\subsubsection{Exploration}
+
+Measure functions prove termination by mapping algorithm state to natural numbers that strictly decrease. Key insights:
+
+\begin{itemize}
+\item Different algorithms need different measures (value of $b$ vs. subarray size)
+\item Well-ordering principle guarantees finite steps
+\item Measure functions often reveal time complexity
+\item Used in languages like Coq and Agda to guarantee termination
+\end{itemize}
+
+\subsubsection{Questions}
+
+\begin{enumerate}
+\item What general principle connects the different measure functions used for these algorithms?
+
+\item Could $\phi(a,b) = a + b$ work as a measure function for the Euclidean algorithm? Why or why not?
+\end{enumerate}
+
+\subsection{Week 5}
+\subsubsection{Homework}
+
+\textbf{Lambda Calculus Workout}
+
+Evaluate the following expression using $\alpha$ and $\beta$ reduction:
+$$(\lambda f.\lambda x.f(f(x))) (\lambda f.\lambda x.(f(f(f\, x))))$$
+
+\paragraph{Solution using $\beta$-reduction}
+
+We apply the $\beta$-rule, which states: $(\lambda v.e_1) e_2 \to e_1[v:=e_2]$ (substitute $e_2$ for $v$ in $e_1$).
+
+\begin{align*}
+&(\lambda f.\lambda x.f(f(x))) (\lambda f.\lambda x.(f(f(f\, x)))) \\
+&\quad \text{Apply $\beta$-reduction: substitute $(\lambda f.\lambda x.(f(f(f\, x))))$ for $f$ in $\lambda x.f(f(x))$} \\
+&\to_\beta \lambda x.(\lambda f.\lambda x.(f(f(f\, x))))((\lambda f.\lambda x.(f(f(f\, x))))\, x) \\
+&\quad \text{Apply $\beta$-reduction to the inner application} \\
+&\to_\beta \lambda x.(\lambda f.\lambda x.(f(f(f\, x))))(\lambda x'.((\lambda f.\lambda x.(f(f(f\, x))))\, x'\, x)) \\
+&\quad \text{We need to use $\alpha$-conversion to avoid variable capture} \\
+&\quad \text{Rename bound variable: $\lambda x.(f(f(f\, x))) \to_\alpha \lambda y.(f(f(f\, y)))$} \\
+&\to_\alpha \lambda x.(\lambda f.\lambda y.(f(f(f\, y))))(\lambda z.((\lambda f.\lambda y.(f(f(f\, y))))\, z\, x)) \\
+&\quad \text{Continue $\beta$-reduction...}
+\end{align*}
+
+\paragraph{Cleaner approach using Church numerals}
+
+The expression has a simpler interpretation if we recognize the pattern. Let's use fresh variable names:
+
+\begin{align*}
+&(\lambda f.\lambda x.f(f(x))) (\lambda g.\lambda y.g(g(g\, y))) \\
+&\quad \text{First $\beta$-reduction: substitute $(\lambda g.\lambda y.g(g(g\, y)))$ for $f$} \\
+&\to_\beta \lambda x.(\lambda g.\lambda y.g(g(g\, y)))((\lambda g.\lambda y.g(g(g\, y)))\, x) \\
+&\quad \text{Second $\beta$-reduction: substitute $(\lambda g.\lambda y.g(g(g\, y)))$ for $g$ in outer abstraction} \\
+&\to_\beta \lambda x.\lambda y.((\lambda g.\lambda y.g(g(g\, y)))\, x)((\lambda g.\lambda y.g(g(g\, y)))\, x)((\lambda g.\lambda y.g(g(g\, y)))\, x\, y) \\
+&\quad \text{Apply $\beta$-reduction three times} \\
+&\to_\beta \lambda x.\lambda y.x(x(x(x(x(x(x(x(x\, y))))))))
+\end{align*}
+
+\paragraph{Final Result}
+$$\boxed{\lambda x.\lambda y.x(x(x(x(x(x(x(x(x\, y))))))))}$$
+
+This is the Church numeral for \textbf{9}, representing the function that applies its first argument 9 times to its second argument.
+
+\paragraph{Mathematical Interpretation}
+
+The given expression represents function composition in the Church encoding:
+\begin{itemize}
+\item $(\lambda f.\lambda x.f(f(x)))$ is the Church numeral 2 (apply $f$ twice)
+\item $(\lambda f.\lambda x.f(f(f\, x)))$ is the Church numeral 3 (apply $f$ three times)  
+\item Applying Church numeral 2 to Church numeral 3 gives $2^3 + 3 = 9$ in this encoding
+\end{itemize}
+
+More precisely, when a Church numeral $n$ is applied to another Church numeral $m$, the result is $n \times m$ when thinking about repeated application. In this case: $3 \times 3 = 9$.
+
+\textbf{Correction:} The standard composition of Church numerals $n$ and $m$ gives $n \cdot m$ (multiplication). Here, $2$ applied to $3$ gives us a function that applies something $2 \times 3 = 6$ times... but we need to be more careful.
+
+Actually, applying the Church numeral for 2 to the Church numeral for 3 as a function gives us: the function that applies its argument $(2 \cdot 3 = 6)$ times. Wait, let me recalculate more carefully by tracking applications...
+
+\textbf{Careful recount:} $\lambda x.\lambda y.x(x(x(x(x(x(x(x(x\, y))))))))$ applies $x$ exactly 9 times to $y$.
+
+Since $2$ applied to $3$ in Church encoding represents iterating "apply 3 times" twice, we get $3 + 3 + 3 = 9$ applications. This is exponentiation: $3^2 = 9$.
+
+\subsubsection{Exploration}
+
+The lambda calculus workout demonstrates several fundamental concepts:
+
+\begin{itemize}
+\item \textbf{$\beta$-reduction}: The core computation rule of lambda calculus, enabling function application
+\item \textbf{$\alpha$-conversion}: Renaming bound variables to avoid capture
+\item \textbf{Church numerals}: Encoding natural numbers as functions (number $n$ = apply a function $n$ times)
+\item \textbf{Function composition}: Higher-order functions that operate on other functions
+\end{itemize}
+
+This connects to programming: higher-order functions in languages like Haskell, JavaScript, and Python work on the same principles. The concept that "data can be represented as functions" is foundational to functional programming.
+
+\subsubsection{Questions}
+
+\begin{enumerate}
+\item Why did Alonzo Church develop lambda calculus before computers existed? What mathematical problem was he trying to solve?
+
+\item How does the ability to represent numbers as functions (Church numerals) demonstrate the expressive power of lambda calculus?
+\end{enumerate}
+
+\subsection{Week 6}
+\subsubsection{Homework}
+
+\textbf{Fixed Point Combinator and Recursive Functions}
+
+Compute \texttt{fact 3} using the fixed point combinator, following the computation rules:
+\begin{itemize}
+\item $\texttt{fix } F \to F\, (\texttt{fix } F)$
+\item $\texttt{let } x = e_1 \texttt{ in } e_2 \to (\lambda x.e_2)\, e_1$
+\item $\texttt{let rec } f = e_1 \texttt{ in } e_2 \to \texttt{let } f = (\texttt{fix } (\lambda f. e_1)) \texttt{ in } e_2$
+\end{itemize}
+
+\paragraph{Solution}
+
+We'll use abbreviations to keep the computation concise:
+\begin{itemize}
+\item Let $F = \lambda \texttt{fact}.\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1)$
+\item Let $B = \lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1)$ (the factorial body)
+\end{itemize}
+
+Note: $F$ is the function that takes \texttt{fact} as input and returns the factorial function body. The fixed point of $F$ gives us the actual recursive factorial function.
+
+\begin{align*}
+&\texttt{let rec fact} = \lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1) \texttt{ in fact } 3 \\
+&\quad \langle\text{def of let rec}\rangle \\
+&\to \texttt{let fact} = (\texttt{fix } (\lambda \texttt{fact}.\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1))) \texttt{ in fact } 3 \\
+&\quad \langle\text{use abbreviation: } F = \lambda \texttt{fact}.\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1)\rangle \\
+&= \texttt{let fact} = (\texttt{fix } F) \texttt{ in fact } 3 \\
+&\quad \langle\text{def of let}\rangle \\
+&\to (\lambda \texttt{fact}.\texttt{fact } 3)\, (\texttt{fix } F) \\
+&\quad \langle\beta\text{-reduction: substitute fix } F \text{ for fact}\rangle \\
+&\to (\texttt{fix } F)\, 3 \\
+&\quad \langle\text{def of fix}\rangle \\
+&\to (F\, (\texttt{fix } F))\, 3 \\
+&\quad \langle\text{expand } F\rangle \\
+&= ((\lambda \texttt{fact}.\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * \texttt{fact}\, (n-1))\, (\texttt{fix } F))\, 3 \\
+&\quad \langle\beta\text{-reduction: substitute fix } F \text{ for fact}\rangle \\
+&\to (\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * (\texttt{fix } F)\, (n-1))\, 3 \\
+&\quad \langle\beta\text{-reduction: substitute } 3 \text{ for } n\rangle \\
+&\to \texttt{if } 3=0 \texttt{ then } 1 \texttt{ else } 3 * (\texttt{fix } F)\, (3-1) \\
+&\quad \langle\text{arithmetic: } 3=0 \text{ is false}\rangle \\
+&\to \texttt{if false then } 1 \texttt{ else } 3 * (\texttt{fix } F)\, (3-1) \\
+&\quad \langle\text{def of if: returns else branch}\rangle \\
+&\to 3 * (\texttt{fix } F)\, (3-1) \\
+&\quad \langle\text{arithmetic: } 3-1 = 2\rangle \\
+&\to 3 * (\texttt{fix } F)\, 2 \\
+&\quad \langle\text{def of fix}\rangle \\
+&\to 3 * (F\, (\texttt{fix } F))\, 2 \\
+&\quad \langle\beta\text{-reduction: substitute fix } F \text{ for fact in } F\rangle \\
+&\to 3 * ((\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * (\texttt{fix } F)\, (n-1))\, 2) \\
+&\quad \langle\beta\text{-reduction: substitute } 2 \text{ for } n\rangle \\
+&\to 3 * (\texttt{if } 2=0 \texttt{ then } 1 \texttt{ else } 2 * (\texttt{fix } F)\, (2-1)) \\
+&\quad \langle\text{def of if: } 2=0 \text{ is false}\rangle \\
+&\to 3 * (2 * (\texttt{fix } F)\, 1) \\
+&\quad \langle\text{def of fix}\rangle \\
+&\to 3 * (2 * (F\, (\texttt{fix } F))\, 1) \\
+&\quad \langle\beta\text{-reduction: substitute fix } F \text{ for fact in } F\rangle \\
+&\to 3 * (2 * ((\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * (\texttt{fix } F)\, (n-1))\, 1)) \\
+&\quad \langle\beta\text{-reduction: substitute } 1 \text{ for } n\rangle \\
+&\to 3 * (2 * (\texttt{if } 1=0 \texttt{ then } 1 \texttt{ else } 1 * (\texttt{fix } F)\, 0)) \\
+&\quad \langle\text{def of if: } 1=0 \text{ is false}\rangle \\
+&\to 3 * (2 * (1 * (\texttt{fix } F)\, 0)) \\
+&\quad \langle\text{def of fix}\rangle \\
+&\to 3 * (2 * (1 * (F\, (\texttt{fix } F))\, 0)) \\
+&\quad \langle\beta\text{-reduction: substitute fix } F \text{ for fact in } F\rangle \\
+&\to 3 * (2 * (1 * ((\lambda n.\texttt{if } n=0 \texttt{ then } 1 \texttt{ else } n * (\texttt{fix } F)\, (n-1))\, 0))) \\
+&\quad \langle\beta\text{-reduction: substitute } 0 \text{ for } n\rangle \\
+&\to 3 * (2 * (1 * (\texttt{if } 0=0 \texttt{ then } 1 \texttt{ else } 0 * (\texttt{fix } F)\, (0-1)))) \\
+&\quad \langle\text{def of if: } 0=0 \text{ is true}\rangle \\
+&\to 3 * (2 * (1 * 1)) \\
+&\quad \langle\text{arithmetic}\rangle \\
+&\to 3 * (2 * 1) \\
+&\quad \langle\text{arithmetic}\rangle \\
+&\to 3 * 2 \\
+&\quad \langle\text{arithmetic}\rangle \\
+&\to 6
+\end{align*}
+
+\paragraph{Final Result}
+$$\boxed{\texttt{fact } 3 = 6}$$
+
+\subsubsection{Exploration}
+
+This exercise demonstrates how recursive functions work through the fixed point combinator:
+
+\begin{itemize}
+\item \textbf{Fixed Point}: The equation $\texttt{fix } F = F\, (\texttt{fix } F)$ shows that $\texttt{fix } F$ is a fixed point of $F$. When $F$ is our factorial transformer, $\texttt{fix } F$ becomes the actual factorial function.
+
+\item \textbf{Unfolding Recursion}: Each time we hit the recursive call $\texttt{fact}\, (n-1)$, we need to unfold $\texttt{fix } F$ again using the definition of fix. This is how recursion is achieved without built-in recursion in the lambda calculus.
+
+\item \textbf{Termination}: The recursion terminates when we reach the base case ($n=0$), where no further unfolding of fix is needed.
+
+\item \textbf{Connection to Programming}: The $\texttt{let rec}$ construct in languages like OCaml and F\# is essentially syntactic sugar for this fixed-point pattern. The language handles the fix combinator behind the scenes.
+\end{itemize}
+
+The fixed point combinator shows that recursion is not a primitive feature—it can be encoded using higher-order functions alone. This is a profound result: pure lambda calculus (with just function abstraction and application) is computationally complete.
+
+\subsubsection{Questions}
+
+\begin{enumerate}
+\item What would happen if we tried to compute $\texttt{fact}\, (-1)$ using this definition? Would the computation terminate?
+
+\item The Y-combinator is another fixed point combinator defined as $Y = \lambda f.(\lambda x.f\, (x\, x))\, (\lambda x.f\, (x\, x))$. How does this differ from the abstract $\texttt{fix}$ we used, and why might $Y$ be harder to work with in a typed language?
+
+\item Can you think of other recursive functions (like Fibonacci or list operations) that could be encoded using the same fixed-point pattern?
+\end{enumerate}
+
+\subsection{Week 7}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 8}
+\subsubsection{Homework}
+
+\textbf{Natural Number Game - Tutorial World: Levels 5-8}
+
+\paragraph{Level 5: Simplifying with \texttt{add\_zero}}
+Prove that $a + (b + 0) + (c + 0) = a + b + c$.
+
+\begin{lstlisting}[language=haskell]
+rw [add_zero]
+rw [add_zero]
+rfl
+\end{lstlisting}
+
+\paragraph{Level 6: Targeted rewriting}
+Prove that $a + (b + 0) + (c + 0) = a + b + c$ using explicit arguments.
+
+\begin{lstlisting}[language=haskell]
+rw [add_zero c]
+rw [add_zero b]
+rfl
+\end{lstlisting}
+
+\paragraph{Level 7: \texttt{succ\_eq\_add\_one}}
+Prove that for all natural numbers $n$, $\text{succ}(n) = n + 1$.
+
+\begin{lstlisting}[language=haskell]
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rfl
+\end{lstlisting}
+
+\paragraph{Level 8: Proving $2 + 2 = 4$}
+Prove that $2 + 2 = 4$.
+
+\begin{lstlisting}[language=haskell]
+nth_rewrite 2 [two_eq_succ_one]
+rw [add_succ]
+rw [one_eq_succ_zero]
+rw [add_succ]
+rw [add_zero]
+rw [<- three_eq_succ_two]
+rw [<- four_eq_succ_three]
+rfl
+\end{lstlisting}
+
+\subsubsection{Natural Language Proof}
+
+\textbf{Level 8: Proving $2 + 2 = 4$}
+
+\begin{proof}
+We want to prove that $2 + 2 = 4$ using only the Peano axioms and previously established theorems about natural numbers.
+
+We begin by expanding the second $2$ in the left-hand side using its definition. By the theorem \texttt{two\_eq\_succ\_one}, we know that $2 = \text{succ}(1)$. Rewriting the second occurrence of $2$, we obtain:
+$$2 + \text{succ}(1) = 4$$
+
+Next, we apply the fundamental recursion axiom for addition, \texttt{add\_succ}, which states that for any natural numbers $a$ and $b$, we have $a + \text{succ}(b) = \text{succ}(a + b)$. Applying this axiom gives us:
+$$\text{succ}(2 + 1) = 4$$
+
+Now we expand $1$ using its definition. By \texttt{one\_eq\_succ\_zero}, we know that $1 = \text{succ}(0)$. Substituting this yields:
+$$\text{succ}(2 + \text{succ}(0)) = 4$$
+
+We apply \texttt{add\_succ} again to the inner addition:
+$$\text{succ}(\text{succ}(2 + 0)) = 4$$
+
+By the base case axiom for addition, \texttt{add\_zero}, which states that $n + 0 = n$ for any natural number $n$, we can simplify $2 + 0$ to $2$:
+$$\text{succ}(\text{succ}(2)) = 4$$
+
+Now we recognize this expression in terms of known number definitions. By the definition \texttt{three\_eq\_succ\_two}, we know that $3 = \text{succ}(2)$. Using this in reverse (indicated by the backwards arrow in the formal proof), we can rewrite $\text{succ}(2)$ as $3$:
+$$\text{succ}(3) = 4$$
+
+Finally, by the definition \texttt{four\_eq\_succ\_three}, we know that $4 = \text{succ}(3)$. Using this in reverse, we obtain:
+$$4 = 4$$
+
+This is true by the reflexivity of equality: any object is equal to itself.
+
+Therefore, $2 + 2 = 4$.
+\end{proof}
+
+\subsubsection{Exploration}
+
+The proof of $2 + 2 = 4$ is a remarkable example of how even the simplest arithmetic facts require rigorous justification when building mathematics from first principles. Several profound insights emerge from this exercise:
+
+\begin{itemize}
+\item \textbf{Numbers as constructions}: In the Peano axioms, numbers are not primitive objects but are constructed iteratively from zero using the successor function. The number $2$ is defined as $\text{succ}(\text{succ}(0))$, $3$ as $\text{succ}(2)$, and $4$ as $\text{succ}(3)$. This constructive approach ensures that all natural numbers can be built systematically.
+
+\item \textbf{Addition as recursion}: Addition is not defined by a lookup table but by two recursive rules: the base case $n + 0 = n$ and the recursive case $n + \text{succ}(m) = \text{succ}(n + m)$. The proof of $2 + 2 = 4$ essentially "executes" this recursive definition step by step.
+
+\item \textbf{The role of definitions}: Much of the proof consists of unfolding and refolding definitions. We expand $2$ into $\text{succ}(1)$, then $1$ into $\text{succ}(0)$, perform the addition, and finally recognize the result as $3$ and then $4$. This shows that definitions are not just abbreviations but active components of reasoning.
+
+\item \textbf{Computational content of proofs}: This proof has a computational interpretation. Each rewrite step corresponds to a computation step, and the entire proof traces the execution of the addition algorithm. This connection between proofs and programs is central to the Curry-Howard correspondence.
+
+\item \textbf{Nothing is obvious in formal systems}: What seems trivial in everyday mathematics ($2 + 2 = 4$) requires multiple logical steps when formalized. This explicitness is both a strength (eliminates ambiguity and hidden assumptions) and a weakness (can obscure high-level mathematical intuition).
+\end{itemize}
+
+This exercise bridges the gap between our intuitive understanding of arithmetic and the formal foundations required for computer-verified mathematics and programming language semantics.
+
+\subsubsection{Questions}
+
+\begin{enumerate}
+\item Why does proving $2 + 2 = 4$ require eight steps when it seems inherently true?
+
+\item When should a programming language prioritize precision over simplicity?
+\end{enumerate}
+
+\subsection{Week 9}
+\subsubsection{Homework}
+
+\textbf{Natural Number Game - Addition World: Level 5 (\texttt{add\_right\_comm})}
+
+\paragraph{Theorem Statement}
+Prove that for all natural numbers $a$, $b$, and $c$, we have $(a + b) + c = (a + c) + b$.
+
+This theorem is called \textit{right commutativity} because it states that the second and third terms can be swapped when grouped with the first term.
+
+\paragraph{Solution 1: Using Induction}
+
+\textbf{Lean Proof:}
+\begin{lstlisting}[language=haskell]
+theorem add_right_comm (a b c : N) : (a + b) + c = (a + c) + b := by
+  induction c with d hd
+  case zero =>
+    rw [add_zero]
+    rw [add_zero]
+    rfl
+  case succ =>
+    rw [add_succ]
+    rw [add_succ]
+    rw [hd]
+    rw [succ_add]
+    rfl
+\end{lstlisting}
+
+\textbf{Mathematical Proof:}
+\begin{proof}
+We prove $(a + b) + c = (a + c) + b$ by induction on $c$.
+
+\textit{Base Case ($c = 0$):} We need to show $(a + b) + 0 = (a + 0) + b$.
+
+Starting with the left-hand side:
+\begin{align*}
+(a + b) + 0 &= a + b \quad \text{(by \texttt{add\_zero})}
+\end{align*}
+
+For the right-hand side:
+\begin{align*}
+(a + 0) + b &= a + b \quad \text{(by \texttt{add\_zero})}
+\end{align*}
+
+Therefore, $(a + b) + 0 = (a + 0) + b$. \checkmark
+
+\textit{Inductive Step:} Assume the inductive hypothesis: $(a + b) + d = (a + d) + b$.
+
+We must prove: $(a + b) + \text{succ}(d) = (a + \text{succ}(d)) + b$.
+
+Starting with the left-hand side:
+\begin{align*}
+(a + b) + \text{succ}(d) &= \text{succ}((a + b) + d) \quad \text{(by \texttt{add\_succ})}\\
+&= \text{succ}((a + d) + b) \quad \text{(by inductive hypothesis)}
+\end{align*}
+
+For the right-hand side:
+\begin{align*}
+(a + \text{succ}(d)) + b &= \text{succ}(a + d) + b \quad \text{(by \texttt{add\_succ})}\\
+&= \text{succ}((a + d) + b) \quad \text{(by \texttt{succ\_add})}
+\end{align*}
+
+Both sides equal $\text{succ}((a + d) + b)$, completing the inductive step.
+
+Therefore, by mathematical induction, $(a + b) + c = (a + c) + b$ for all natural numbers $a$, $b$, and $c$.
+\end{proof}
+
+\paragraph{Solution 2: Using Previously Proven Theorems (No Induction)}
+
+\textbf{Lean Proof:}
+\begin{lstlisting}[language=haskell]
+theorem add_right_comm (a b c : N) : (a + b) + c = (a + c) + b := by
+  rw [add_assoc]
+  rw [add_comm b c]
+  rw [<- add_assoc]
+\end{lstlisting}
+
+\textbf{Mathematical Proof:}
+\begin{proof}
+We prove $(a + b) + c = (a + c) + b$ using the associativity and commutativity of addition.
+
+\begin{align*}
+(a + b) + c &= a + (b + c) \quad \text{(by associativity: \texttt{add\_assoc})}\\
+&= a + (c + b) \quad \text{(by commutativity: \texttt{add\_comm})}\\
+&= (a + c) + b \quad \text{(by associativity in reverse)}
+\end{align*}
+
+Therefore, $(a + b) + c = (a + c) + b$.
+\end{proof}
+
+\paragraph{Comparison of the Two Approaches}
+
+\begin{itemize}
+\item \textbf{Induction approach:} This solution builds the theorem from scratch using only the fundamental definition of addition (the recursive rules \texttt{add\_zero} and \texttt{add\_succ}). It directly proves the property by examining the structure of natural numbers. This approach is more fundamental but requires more steps.
+
+\item \textbf{Algebraic approach:} This solution leverages previously proven theorems (\texttt{add\_assoc} and \texttt{add\_comm}). It's more elegant and intuitive, treating addition as an abstract operation with known properties. However, it depends on having already proven those properties (likely using induction themselves).
+
+\item \textbf{Trade-off:} The inductive proof is self-contained but longer, while the algebraic proof is shorter but requires a richer theory. This mirrors a general principle in mathematics and computer science: we can either work at a low level with explicit detail, or at a high level using abstractions—each approach has its place.
+\end{itemize}
+
+\subsubsection{Exploration}
+
+This proof reveals two fundamental approaches to formal reasoning:
+
+\begin{itemize}
+\item \textbf{Induction (constructive):} Builds the proof from scratch using the recursive definition of addition. Works at the level of number structure. Longer but self-contained.
+
+\item \textbf{Algebraic (abstract):} Reuses previously proven theorems (\texttt{add\_assoc}, \texttt{add\_comm}). Treats addition as an abstract operation with known properties. Shorter but dependent on prior results.
+\end{itemize}
+
+The key insight: there are multiple valid paths to the same mathematical truth. The choice between approaches mirrors software engineering trade-offs between "building from scratch" and "reusing libraries"—each has its place depending on context and goals.
+
+\subsubsection{Questions}
+
+\begin{enumerate}
+\item The inductive proof required 10 lines while the algebraic proof required only 3. Does this mean the algebraic proof is "better"? What if we count the lines needed to prove \texttt{add\_assoc} and \texttt{add\_comm}?
+
+\item In software development, we often choose between "reinventing the wheel" and "using libraries." How does this trade-off relate to our two proof strategies?
+\end{enumerate}
+
+\subsection{Week 10}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\subsection{Week 11}
+\subsubsection{Homework}
+\subsubsection{Exploration}
+\subsubsection{Questions}
+
+\section{Synthesis}
+
+\section{Evidence of Participation}
+
+\section{Conclusion}\label{conclusion}
+
+\begin{thebibliography}{9}
+\end{thebibliography}
+
+\end{document}
